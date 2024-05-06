@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using Block.user;
 using Block.user.level;
 using Block.manage;
+using Block.Algorithm;
 
 namespace Block.form
 {
 	public partial class BlockForm : Form
 	{
 		private CourseVisualizer visualizer;
+		private int prevY = 9;
 		
 		public BlockForm()
 		{
@@ -28,6 +30,15 @@ namespace Block.form
 		void RoundButton1Click(object sender, EventArgs e)
 		{
 			visualizer.Print(Course.GetTestCourse());
+			trackBar.Value = trackBar.Maximum;
+			prevY = trackBar.Maximum;
+		}
+
+		void TrackBarScroll(object sender, EventArgs e)
+		{
+			int offset = visualizer.GetMinMaxY().s / 10;
+			visualizer.MoveAllY((trackBar.Value - prevY) * offset);
+			prevY = trackBar.Value;
 		}
 	}
 	
@@ -42,6 +53,8 @@ namespace Block.form
 		private readonly int OFFSET_X;
 		private readonly int START_Y;
 		
+		private IntPairCache maxMinYCache;
+		
 		public CourseVisualizer(TabPage page)
 		{
 			field = page;
@@ -51,101 +64,84 @@ namespace Block.form
 			START_Y = page.Height - (int) (ELEMENT_D * 1.5);
 		}
 		
+		public IntPairCache GetMinMaxY()
+		{
+			if (maxMinYCache != null) return maxMinYCache;
+			
+			maxMinYCache = new IntPairCache(field.Controls[0].Location.Y, field.Controls[0].Location.Y);
+			
+			foreach(Control curControl in field.Controls)
+			{
+				if (curControl.Location.Y < maxMinYCache.f) maxMinYCache.f = curControl.Location.Y;
+				if (curControl.Location.Y > maxMinYCache.s) maxMinYCache.s = curControl.Location.Y;
+			}
+			
+			return maxMinYCache;
+		}
+		
+		public void MoveAllY(int yOffset)
+		{
+			foreach(Control curControl in field.Controls)
+				if (!(curControl.Name.Equals("trackBar")))
+					curControl.Top += yOffset;
+		}
+		
 		public void Print(Course course)
 		{
 			List<RoundButton> visualized = new List<RoundButton>();
 			
-			List<Exam> usedExams = new List<Exam>();
-			List<Exam> unusedExams = new List<Exam>();
-			foreach(var curExam in course.Exams)
-				unusedExams.Add(curExam);
-						
-			List<Theory> theory = course.Theory;
-			int i = 0;
-			int layer = 0;
-			while(i < theory.Count)
+			int startUnwrapPosition = 0;
+			
+			foreach (Exam curExam in course.Exams)
 			{
-				Exam examToPass = ExamToPass(unusedExams, theory, theory[i]);
-				if (examToPass != null)
-				{
-					layer += 2;
-					visualized.Add(GetExamRoundButton(
-						examToPass.title,
-						MIDDLE_X - ELEMENT_R,
-						START_Y - (int) (ELEMENT_D * 1.2) * (layer / 2),
-						examToPass
-					));
-					unusedExams.Remove(examToPass);
-					usedExams.Add(examToPass);
-					
-					if (layer % 2 == 1) layer++;
-					continue;
-				}
+				List<RoundButton> unwrapedTheory = UnwrapExam(curExam, startUnwrapPosition);
+				RoundButton examButton = GetExamRoundButton(
+					GetButtonMiddlePlacement(curExam.TheoryNeeded.Count + 2 + startUnwrapPosition, MIDDLE_X),
+					curExam
+				);
 				
-				var curTheory = theory[i];
+				foreach(var curControl in unwrapedTheory)
+					field.Controls.Add(curControl);
+				field.Controls.Add(examButton);
 				
-				visualized.Add(GetBasicRoundButton(
-					curTheory.Title,
-					MIDDLE_X + ((i % 2 == 0) ? OFFSET_X : -OFFSET_X) - ELEMENT_R,
-					START_Y - (int) (ELEMENT_D * 1.2) * (layer++ / 2),
-					curTheory.Text
+				startUnwrapPosition += curExam.TheoryNeeded.Count + 5;
+				startUnwrapPosition -= startUnwrapPosition % 2;
+			}
+			
+			maxMinYCache = null;
+		}
+		
+		private List<RoundButton> UnwrapExam(Exam exam, int startUnwrapPosition)
+		{
+			List<RoundButton> unwraped = new List<RoundButton>();
+			
+			for (int i = 0; i < exam.TheoryNeeded.Count; i++)
+				unwraped.Add(GetBasicRoundButton(
+					exam.TheoryNeeded[i].Title,
+					GetButtonPlacement(i + startUnwrapPosition, MIDDLE_X, exam.TheoryNeeded.Count + startUnwrapPosition),
+					exam.TheoryNeeded[i].Text
 				));
-				
-				i++;
-			}
-			i = 0;
-			while (i < unusedExams.Count)
-			{
-				Exam examToPass = ExamToPass(unusedExams, theory, null);
-				if (examToPass != null)
-				{
-					layer += 2;
-					visualized.Add(GetExamRoundButton(
-						examToPass.title,
-						MIDDLE_X - ELEMENT_R,
-						START_Y - (int) (ELEMENT_D * 1.2) * (layer / 2),
-						examToPass
-					));
-					
-					unusedExams.Remove(examToPass);
-				}
-				else i++;
-			}
 			
-			foreach(var cur in visualized)
-				field.Controls.Add(cur);
+			return unwraped;
 		}
 		
-		private static Exam ExamToPass(List<Exam> unusedExams, List<Theory> theory, Theory curTheory)
+		
+		private static Point GetButtonPlacement(int id, int middleX, int maxId)
 		{
-			List<Theory> knownTheory = new List<Theory>();
-			foreach(var cur in theory)
-			{
-				if (cur == curTheory) break;
-				knownTheory.Add(cur);
-			}
-			
-			foreach(var curUnusedExam in unusedExams)
-			{
-				bool allTheoryNeededIsRead = true;
-				foreach(var cur in curUnusedExam.TheoryNeeded)
-					if (!knownTheory.Contains(cur) || knownTheory.Count == 0)
-					{
-						allTheoryNeededIsRead = false;
-						break;
-					}
-				
-				if (allTheoryNeededIsRead)
-					return curUnusedExam;
-			}
-			return null;
+			if (id + 1 >= maxId && id % 2 == (maxId - 1) % 2) return GetButtonMiddlePlacement(id, middleX);
+			return new Point(((id % 2) * 2 - 1) * ELEMENT_D + middleX - ELEMENT_R, id / 2 * ELEMENT_D + id / 2 * ELEMENT_R / 4);
 		}
 		
-		private static RoundButtonContext GetBasicRoundButton(string name, int x, int y, string context)
+		private static Point GetButtonMiddlePlacement(int id, int middleX)
 		{
-			var button = new RoundButtonContext(new StringContext(context));
+			return new Point(middleX - ELEMENT_R, id / 2 * ELEMENT_D + id / 2 * ELEMENT_R / 4);
+		}
+		
+		private static RoundButtonContext GetBasicRoundButton(string name, Point location, string context)
+		{
+			var button = new RoundButtonContext(new StringContext(name, context));
 			
-			button.Location = new System.Drawing.Point(x, y);
+			button.Location = location;
 			button.Name = name;
 			button.Size = new System.Drawing.Size(ELEMENT_D, ELEMENT_D);
 			button.TabIndex = 0;
@@ -156,18 +152,19 @@ namespace Block.form
 			return button;
 		}
 		
-		private static RoundButtonContext GetExamRoundButton(string name, int x, int y, Exam exam)
+		private static RoundButtonContext GetExamRoundButton(Point location, Exam exam)
 		{
-			var button = new RoundButtonContext(new FormContext(exam));
-			button.Location = new System.Drawing.Point(x, y);
-			button.Name = name;
+			var button = new RoundButtonContext(new FormContext(exam.Name, exam));
+			button.Location = location;
+			button.Name = exam.Name;
 			button.Size = new System.Drawing.Size(ELEMENT_D, ELEMENT_D);
 			button.TabIndex = 0;
-			button.Text = name;
+			button.Text = exam.Name;
 			button.UseVisualStyleBackColor = true;
 			button.Visible = true;
 			
 			return button;
 		}
+		
 	}
 }

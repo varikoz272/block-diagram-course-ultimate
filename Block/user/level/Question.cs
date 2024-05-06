@@ -7,19 +7,16 @@ namespace Block.user.level
 	{
 		private string text;
 		private List<Answer> answers;
-		private QuestionAnswering type;
+		private Answer correctAnswer;
 		
-		public Question(string text, List<Answer> answers, QuestionAnswering type)
+		public Question(string text, List<Answer> answers, int correctAnswerId)
 		{
 			this.text = text;
 			this.answers = answers;
-			this.type = type;
+			this.correctAnswer = answers[correctAnswerId];
 		}
 		
-		public Question(string question, List<Answer> answers) : this(question, answers, QuestionAnswering.Single)
-		{
-			
-		}
+		public Question(string question, List<Answer> answers) : this(question, answers, 0) { }
 		
 		public string Text
 		{
@@ -30,13 +27,7 @@ namespace Block.user.level
 		public List<Answer> Answers
 		{
 			get {return answers;}
-			set{answers = value;}
+			private set {answers = value;}
 		}
-	}
-	
-	public enum QuestionAnswering
-	{
-		Single,
-		Multiple,
 	}
 }

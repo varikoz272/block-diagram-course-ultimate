@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm\IntPairCache.cs" />
     <Compile Include="form\BlockForm.cs" />
     <Compile Include="form\BlockForm.Designer.cs">
       <DependentUpon>BlockForm.cs</DependentUpon>
@@ -60,12 +61,12 @@
       <DependentUpon>OpeningForm.cs</DependentUpon>
     </Compile>
     <Compile Include="form\RoundButton.cs" />
+    <Compile Include="manage\SQL\SqlTableManager.cs" />
     <Compile Include="manage\TopManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="user\Action.cs" />
     <Compile Include="user\Admin.cs" />
-    <Compile Include="user\Group.cs" />
     <Compile Include="user\level\Answer.cs" />
     <Compile Include="user\level\Context.cs" />
     <Compile Include="user\level\Course.cs" />
@@ -74,12 +75,13 @@
     <Compile Include="user\level\Theory.cs" />
     <Compile Include="user\Student.cs" />
     <Compile Include="user\Tutor.cs" />
-    <Compile Include="user\UnverifiedUserException.cs" />
     <Compile Include="user\User.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="manage" />
     <Folder Include="form" />
+    <Folder Include="manage\SQL" />
+    <Folder Include="Algorithm" />
     <Folder Include="user" />
     <Folder Include="user\level" />
   </ItemGroup>

@@ -5,14 +5,23 @@ namespace Block.user.level
 {
 	public class Exam
 	{
-		public string title = "ТЕСТ";
+		private string name;
 		private List<Theory> theoryNeeded;
 		private List<Question> questions;
 		
-		public Exam(List<Theory> theoryNeeded,  List<Question> questions)
+		public Exam(List<Theory> theoryNeeded,  List<Question> questions) : this ("Тест", theoryNeeded, questions) { }
+		
+		public Exam(string name, List<Theory> theoryNeeded,  List<Question> questions)
 		{
+			this.name = name;
 			this.theoryNeeded = theoryNeeded;
 			this.questions = questions;
+		}
+		
+		public string Name
+		{
+			get {return name;}
+			private set {name = value;}
 		}
 		
 		public List<Theory> TheoryNeeded

@@ -31,11 +31,13 @@ namespace Block.form
 		{
 			this.pageControl = new System.Windows.Forms.TabControl();
 			this.coursePage = new System.Windows.Forms.TabPage();
+			this.trackBar = new System.Windows.Forms.TrackBar();
 			this.roundButton1 = new Block.form.RoundButton();
 			this.profilePage = new System.Windows.Forms.TabPage();
 			this.settingsPage = new System.Windows.Forms.TabPage();
 			this.pageControl.SuspendLayout();
 			this.coursePage.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pageControl
@@ -51,6 +53,7 @@ namespace Block.form
 			// 
 			// coursePage
 			// 
+			this.coursePage.Controls.Add(this.trackBar);
 			this.coursePage.Controls.Add(this.roundButton1);
 			this.coursePage.Location = new System.Drawing.Point(4, 22);
 			this.coursePage.Name = "coursePage";
@@ -59,6 +62,19 @@ namespace Block.form
 			this.coursePage.TabIndex = 1;
 			this.coursePage.Text = "Курс";
 			this.coursePage.UseVisualStyleBackColor = true;
+			// 
+			// trackBar
+			// 
+			this.trackBar.LargeChange = 1;
+			this.trackBar.Location = new System.Drawing.Point(532, 0);
+			this.trackBar.Maximum = 9;
+			this.trackBar.Name = "trackBar";
+			this.trackBar.Orientation = System.Windows.Forms.Orientation.Vertical;
+			this.trackBar.Size = new System.Drawing.Size(45, 535);
+			this.trackBar.TabIndex = 2;
+			this.trackBar.TickStyle = System.Windows.Forms.TickStyle.Both;
+			this.trackBar.Value = 9;
+			this.trackBar.Scroll += new System.EventHandler(this.TrackBarScroll);
 			// 
 			// roundButton1
 			// 
@@ -101,6 +117,8 @@ namespace Block.form
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.BlockFormFormClosed);
 			this.pageControl.ResumeLayout(false);
 			this.coursePage.ResumeLayout(false);
+			this.coursePage.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -109,5 +127,6 @@ namespace Block.form
 		private System.Windows.Forms.TabPage coursePage;
 		private System.Windows.Forms.TabPage profilePage;
 		private System.Windows.Forms.TabControl pageControl;
+		private System.Windows.Forms.TrackBar trackBar;
 	}
 }

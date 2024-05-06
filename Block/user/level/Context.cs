@@ -16,14 +16,28 @@ namespace Block.user.level
 		protected static readonly Size ELEMENT_SIZE = new Size(30, 30);
 		protected static readonly int SCREEN_WIDTH = Screen.PrimaryScreen.Bounds.Width;
 		protected static readonly int SCREEN_HEIGHT = Screen.PrimaryScreen.Bounds.Height;
+	
+		protected string title;
+	
+		protected Context(string title)
+		{
+			this.title = title;
+		}
+		
 		public abstract void GetMessage();
+		
+		public string Title
+		{
+			get {return title;}
+			private set{title = value;}
+		}
 	}
 	
 	public class StringContext : Context
 	{
 		private string text;
 		
-		public StringContext(string text)
+		public StringContext(string title, string text) : base(title)
 		{
 			this.text = text;
 		}
@@ -48,7 +62,7 @@ namespace Block.user.level
 		private Exam exam;
 		private int curQuestionId;
 		
-		public FormContext(Exam exam)
+		public FormContext(string title, Exam exam) : base(title)
 		{
 			this.exam = exam;
 			curQuestionId = 0;
@@ -69,10 +83,6 @@ namespace Block.user.level
 			
 			addControlButtons(questionForm.Controls, this, questionForm, curQuestionId, exam.Questions.Count);
 		}
-		
-		
-		
-		
 		
 		private static void addControlButtons(Control.ControlCollection controls, FormContext formHolder, Form form, int curIndex, int maxIndex)
 		{
