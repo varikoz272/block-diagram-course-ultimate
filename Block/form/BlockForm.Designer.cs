@@ -31,6 +31,7 @@ namespace Block.form
 		{
 			this.pageControl = new System.Windows.Forms.TabControl();
 			this.coursePage = new System.Windows.Forms.TabPage();
+			this.button1 = new System.Windows.Forms.Button();
 			this.trackBar = new System.Windows.Forms.TrackBar();
 			this.roundButton1 = new Block.form.RoundButton();
 			this.profilePage = new System.Windows.Forms.TabPage();
@@ -53,6 +54,7 @@ namespace Block.form
 			// 
 			// coursePage
 			// 
+			this.coursePage.Controls.Add(this.button1);
 			this.coursePage.Controls.Add(this.trackBar);
 			this.coursePage.Controls.Add(this.roundButton1);
 			this.coursePage.Location = new System.Drawing.Point(4, 22);
@@ -62,6 +64,16 @@ namespace Block.form
 			this.coursePage.TabIndex = 1;
 			this.coursePage.Text = "Курс";
 			this.coursePage.UseVisualStyleBackColor = true;
+			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(48, 110);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(249, 225);
+			this.button1.TabIndex = 3;
+			this.button1.Text = "button1";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.Button1Click);
 			// 
 			// trackBar
 			// 
@@ -128,5 +140,6 @@ namespace Block.form
 		private System.Windows.Forms.TabPage profilePage;
 		private System.Windows.Forms.TabControl pageControl;
 		private System.Windows.Forms.TrackBar trackBar;
+		private System.Windows.Forms.Button button1;
 	}
 }

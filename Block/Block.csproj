@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm\IntPairCache.cs" />
+    <Compile Include="Algorithm\ISQLData.cs" />
     <Compile Include="form\BlockForm.cs" />
     <Compile Include="form\BlockForm.Designer.cs">
       <DependentUpon>BlockForm.cs</DependentUpon>

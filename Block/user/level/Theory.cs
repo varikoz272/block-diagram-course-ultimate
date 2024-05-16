@@ -1,28 +1,37 @@
 ﻿using System;
 
+using Block.Algorithm;
+
 namespace Block.user.level
 {
-	public class Theory
+	public class Theory : ISQLData
 	{
-		private string title;
+		private int id;
+		private string name;
 		private string text;
 		
-		public Theory(string title, string text)
+		public Theory(int id, string name, string text)
 		{
-			this.title = title;
+			this.id = id;
+			this.name = name;
 			this.text = text;
 		}
 		
-		public string Title
+		public string Name
 		{
-			get {return title;}
-			private set {title = value;}
+			get {return name;}
+			private set {name = value;}
 		}
 		
 		public string Text
 		{
 			get {return text;}
 			private set {text = value;}
+		}
+		
+		public int GetId()
+		{
+			return id;
 		}
 	}
 }

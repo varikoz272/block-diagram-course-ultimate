@@ -126,10 +126,10 @@ namespace Block.user.level
 		
 		private static void addAnswerLabel(Control.ControlCollection controls, string text, int id)
 		{
-			Label answerLabel = new Label();
+			RadioButton answerLabel = new RadioButton();
 			answerLabel.Text = text;
 			answerLabel.Location = new Point(ELEMENT_SIZE.Width / 2, id * ELEMENT_SIZE.Height + ELEMENT_SIZE.Height * 2);
-			answerLabel.Size = new Size(FORM_WIDTH, answerLabel.PreferredHeight);
+			answerLabel.Size = new Size(FORM_WIDTH, 20);
 			controls.Add(answerLabel);
 		}
 	}

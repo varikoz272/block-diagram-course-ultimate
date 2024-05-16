@@ -8,25 +8,18 @@ using System.Data.SqlClient;
 
 using Block.user;
 using Block.user.level;
+using Block.manage.SQL;
 
 namespace Block.manage
 {
 	public sealed class TopManager
 	{
-		
-		
 		public static TopManager instance = new TopManager();
+		//DESKTOP-DAQPCTH\SQLEXPRESS ноут
+		//DESKTOP-8UOLSK2\SQLEXPRESS комп
+		private string dbConnectionQuery = @"Data Source=DESKTOP-8UOLSK2\SQLEXPRESS;Initial Catalog=kurs3;Integrated Security=True";
 		
-		private string dbConnectionQuery = @"Data Source=DESKTOP-DAQPCTH\SQLEXPRESS;Initial Catalog=database_306;Integrated Security=True";
-		private static readonly string USER_TABLE_NAME = "user_";
-		private static readonly string ROLE_TABLE_NAME = "role";
-		private static readonly string COURSE_TABLE_NAME = "course";
-		private static readonly string EXAM_TABLE_NAME = "exam";
-		private static readonly string QUESTION_TABLE_NAME = "question";
-		private static readonly string ANSWER_TABLE_NAME = "answer";
-		private static readonly string THEORY_TABLE_NAME = "theory";
-		
-		private SqlConnection connection;
+		private SqlTableManager SQLManager;
 		
 		private List<User> users;
 		private List<Course> courses;
@@ -35,12 +28,23 @@ namespace Block.manage
 		{
 			users = new List<User>();
 			courses = new List<Course>();
-//			connection = new SqlConnection(dbConnectionQuery);
+			
+			var connection = new SqlConnection(dbConnectionQuery);
+			connection.Open();
+			SQLManager = new SqlTableManager(connection);
+			
+			Update();
 		}
 		
 		public void disconnectDatabase()
 		{
-			//connection.Close();
+			SQLManager.CloseConnection();
+		}
+		
+		public void Update()
+		{
+			users = SQLManager.GetUsers();
+			courses = SQLManager.GetCourses();
 		}
 		
 		public string DbConnectionQuery
@@ -49,5 +53,23 @@ namespace Block.manage
 			private set {dbConnectionQuery = value;}
 		}
 		
+		public List<User> Users
+		{
+			get {return users;}
+			private set {users = value;}
+		}
+		
+		public List<Course> Courses
+		{
+			get {return courses;}
+			private set {courses = value;}
+		}
+	}
+	
+	public enum AvaibleRoles
+	{
+		Student,
+		Tutor,
+		Admin,
 	}
 }

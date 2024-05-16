@@ -40,6 +40,21 @@ namespace Block.form
 			visualizer.MoveAllY((trackBar.Value - prevY) * offset);
 			prevY = trackBar.Value;
 		}
+		void Button1Click(object sender, EventArgs e)
+		{
+//			string allUsersNames = "";
+//			foreach (var curUser in TopManager.instance.Users)
+//				allUsersNames += curUser.Password + "\n";
+//			
+//			button1.Text = allUsersNames;
+			
+			Console.WriteLine("zhopa");
+			
+//			string allCourses = "";
+//			foreach (var curCourse in TopManager.instance.Courses)
+//				allCourses += curCourse.Name + "\n";
+//			button1.Text = allCourses;
+		}
 	}
 	
 	internal sealed class CourseVisualizer
@@ -117,7 +132,7 @@ namespace Block.form
 			
 			for (int i = 0; i < exam.TheoryNeeded.Count; i++)
 				unwraped.Add(GetBasicRoundButton(
-					exam.TheoryNeeded[i].Title,
+					exam.TheoryNeeded[i].Name,
 					GetButtonPlacement(i + startUnwrapPosition, MIDDLE_X, exam.TheoryNeeded.Count + startUnwrapPosition),
 					exam.TheoryNeeded[i].Text
 				));
