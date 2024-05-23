@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Block.Algorithm;
+
 namespace Block.user.level
 {
-	public class Answer
+	public class Answer : ISQLData
 	{
+		protected int id;
 		private string text;
 		
-		public Answer(string text)
+		public Answer(int id, string text)
 		{
+			this.id = id;
 			this.text = text;
 		}
 		
@@ -16,6 +20,11 @@ namespace Block.user.level
 		{
 			get {return text;}
 			private set {text = value;}
+		}
+		
+		public int GetId()
+		{
+			return id;
 		}
 	}
 }

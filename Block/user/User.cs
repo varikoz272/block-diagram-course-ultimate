@@ -4,15 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 
+using Block.Algorithm;
+
 namespace Block.user
 {
-	public abstract class User
+	public abstract class User : ISQLData
 	{
-		private string name;
-		private string password;
+		protected int id;
+		protected string name;
+		protected string password;
 		
-		public User(string name, string password)
+		public User(int id, string name, string password)
 		{
+			this.id = id;
 			this.name = name;
 			this.password = password;
 		}
@@ -27,6 +31,11 @@ namespace Block.user
 		{
 			get { return password; }
 			protected set { password = value; }
+		}
+		
+		public int GetId()
+		{
+			return id;
 		}
 		
 		protected abstract bool IsAvaibleToChat();

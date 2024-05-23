@@ -53,6 +53,10 @@
     <Compile Include="form\BlockForm.Designer.cs">
       <DependentUpon>BlockForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\JoinForm.cs" />
+    <Compile Include="form\JoinForm.Designer.cs">
+      <DependentUpon>JoinForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\LoginForm.cs" />
     <Compile Include="form\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -89,6 +93,9 @@
   <ItemGroup>
     <EmbeddedResource Include="form\BlockForm.resx">
       <DependentUpon>BlockForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\JoinForm.resx">
+      <DependentUpon>JoinForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>

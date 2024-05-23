@@ -3,6 +3,11 @@ using System.Drawing;
 using System.Windows.Forms;
 using Block.manage;
 
+using System.Data;
+using System.Data.SqlClient;
+
+
+
 namespace Block.form
 {
 	public partial class LoginForm : Form
@@ -31,22 +36,70 @@ namespace Block.form
 			return null;
 		}
 		
-		private void ComeBack(LoginInfo info)
+		private void ComeBack(LoginInfo info) 
 		{
-			if (info.name.Equals("")) return;
-			if (info.password.Equals("")) return;
-			Dispose();
-			new BlockForm().Show();
+			if (info.name.Equals("")) throw new PassException("Введите имя");
+			if (info.password.Equals("")) throw new PassException("Введите пороль");
+			
+			if (info.input == Input.Login)
+			{
+				foreach (var curUser in TopManager.instance.Users)
+					if (curUser.Name.Equals(info.name) && curUser.Password.Equals(info.password))
+					{
+						Dispose();
+						new BlockForm(TopManager.instance.GetUserByName(info.name)).Show();
+						return;
+					}
+				throw new PassException("Неправильное имя или пороль");
+			}
+			
+			else
+			{
+				foreach (var curUser in TopManager.instance.Users)
+					if (curUser.Name.Equals(info.name))
+						throw new PassException("Имя занято");
+				
+				TopManager.instance.RegisterUser(info.name, info.password);
+				Dispose();
+				new BlockForm(TopManager.instance.GetUserByName(info.name)).Show();
+				return;
+			}
 		}
 		
 		private void LoginButtonClick(object sender, EventArgs e)
 		{
-			ComeBack(GetInput((Button) sender));
+			try 
+			{
+				ComeBack(GetInput((Button) sender));
+			}
+			catch (PassException ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 		}
 		
 		private void RegistrationButtonClick(object sender, EventArgs e)
 		{
-			ComeBack(GetInput((Button) sender));
+			try 
+			{
+				ComeBack(GetInput((Button) sender));
+			}
+			catch (PassException ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+		}
+		
+		private void PassButtonClick(object sender, EventArgs e)
+		{
+			try 
+			{
+				ComeBack(GetInput((Button) sender));
+			}
+			catch (PassException ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
 		}
 		
 		void LoginFormFormClosing(object sender, FormClosingEventArgs e)
@@ -74,5 +127,10 @@ namespace Block.form
 			this.password = password;
 			this.input = input;
 		}
+	}
+	
+	internal class PassException : Exception
+	{
+		public PassException(string msg) : base(msg) { }
 	}
 }

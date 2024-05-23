@@ -8,10 +8,7 @@ namespace Block.user
 {
 	public class Admin : User
 	{
-		public Admin(string name, string password) : base(name, password)
-		{
-			
-		}
+		public Admin(int id, string name, string password) : base(id, name, password) { }
 		
 		protected sealed override bool IsAvaibleToChat()
 		{

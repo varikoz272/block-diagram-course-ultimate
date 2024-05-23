@@ -15,10 +15,12 @@ namespace Block.form
 		private CourseVisualizer visualizer;
 		private int prevY = 9;
 		
-		public BlockForm()
+		public BlockForm(User user)
 		{
 			InitializeComponent();
+			TopManager.instance.activeUser = user;
 			visualizer = new CourseVisualizer(coursePage);
+			visualizer.PrintMembersList(TopManager.instance.Users, (user.GetType().Name.Equals("Tutor")));
 		}
 		
 		private void BlockFormFormClosed(object sender, FormClosedEventArgs e)
@@ -27,9 +29,14 @@ namespace Block.form
 			Application.ExitThread();
 		}
 		
-		void RoundButton1Click(object sender, EventArgs e)
+		void SwitchCourseButtonClick(object sender, EventArgs e)
 		{
-			visualizer.Print(Course.GetTestCourse());
+			visualizer.Clear(new List<object> { sender, joinRoundButton, trackBar } );
+			var curCourse = TopManager.instance.NextCourse;
+			visualizer.Print(curCourse);
+			if (curCourse != null)
+				visualizer.PrintMembersList(curCourse.JoinedUsers, (TopManager.instance.activeUser.GetType().Name.Equals("Tutor")));
+			
 			trackBar.Value = trackBar.Maximum;
 			prevY = trackBar.Maximum;
 		}
@@ -40,20 +47,10 @@ namespace Block.form
 			visualizer.MoveAllY((trackBar.Value - prevY) * offset);
 			prevY = trackBar.Value;
 		}
-		void Button1Click(object sender, EventArgs e)
+		
+		void JoinRoundButtonClick(object sender, EventArgs e)
 		{
-//			string allUsersNames = "";
-//			foreach (var curUser in TopManager.instance.Users)
-//				allUsersNames += curUser.Password + "\n";
-//			
-//			button1.Text = allUsersNames;
-			
-			Console.WriteLine("zhopa");
-			
-//			string allCourses = "";
-//			foreach (var curCourse in TopManager.instance.Courses)
-//				allCourses += curCourse.Name + "\n";
-//			button1.Text = allCourses;
+			new JoinForm().Show();
 		}
 	}
 	
@@ -101,8 +98,19 @@ namespace Block.form
 					curControl.Top += yOffset;
 		}
 		
+		public void Clear(List<object> except)
+		{
+			foreach (Control curEl in field.Controls)
+			{
+				if (!(except.Contains(curEl)))
+					field.Controls.Remove(curEl);
+			}
+		}
+		
 		public void Print(Course course)
 		{
+			if (course == null) return;
+			
 			List<RoundButton> visualized = new List<RoundButton>();
 			
 			int startUnwrapPosition = 0;
@@ -179,6 +187,45 @@ namespace Block.form
 			button.Visible = true;
 			
 			return button;
+		}
+		
+		public void PrintMembersList(List<User> joined, bool isTeacher)
+		{
+			for (int i = 0; i < joined.Count; i++)
+			{
+				var curUser = joined[i];
+				var curLabel = new Label();
+				curLabel.Text = curUser.Name;
+				curLabel.Location = new Point(5, 20 * i + 50);
+				curLabel.Visible = true;
+				
+				field.Controls.Add(curLabel);
+				
+				if (isTeacher)
+				{
+					var curKickButton = new RoundButton();
+					curKickButton.Size = new System.Drawing.Size(curLabel.Height, curLabel.Height);
+					curKickButton.Text = "X";
+					curKickButton.ForeColor = Color.Red;
+					curKickButton.Location  = new Point(curLabel.Size.Width + 10, 20 * i + 50);
+					curKickButton.Visible = true;
+					curKickButton.Click += (s, a) =>
+					{
+						Label senderLabel = GetLabelAtY((s as RoundButton).Location.Y);
+						TopManager.instance.LeaveCourse(TopManager.instance.GetUserByName(senderLabel.Text), TopManager.instance.CurrentCourse);
+					};
+					
+					field.Controls.Add(curKickButton);
+				}
+			}
+		}
+		
+		private Label GetLabelAtY(int y)
+		{
+			foreach (Control curControl in field.Controls)
+				if (curControl.GetType().Name.Equals("Label"))
+					if (curControl.Location.Y == y) return curControl as Label;
+			return null;
 		}
 		
 	}

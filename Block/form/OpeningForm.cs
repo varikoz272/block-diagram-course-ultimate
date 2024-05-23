@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Windows.Forms;
 
+using Block.manage;
+
 namespace Block.form
 {
 
@@ -15,6 +17,8 @@ namespace Block.form
 		
 		private void Prepare()
 		{
+			TopManager.instance.Update();
+			
 			prepareTimer.Stop();
 			new LoginForm().Show();
 			Hide();

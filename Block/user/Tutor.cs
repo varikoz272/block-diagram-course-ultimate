@@ -5,10 +5,7 @@ namespace Block.user
 {
 	public class Tutor : User
 	{
-		public Tutor(string name, string password) : base(name, password)
-		{
-			
-		}
+		public Tutor(int id, string name, string password) : base(id, name, password) { }
 		
 		protected sealed override bool IsAvaibleToChat()
 		{

@@ -11,12 +11,15 @@ namespace Block.user.level
 		private string name;
 		private List<Theory> theoryNeeded;
 		private List<Question> questions;
+		private List<User> passed;
 		
-		public Exam(List<Theory> theoryNeeded,  List<Question> questions) : this (0, "Тест", theoryNeeded, questions) { }
+		public Exam(List<Theory> theoryNeeded,  List<Question> questions, List<User> passed) :
+			this (0, "Тест", theoryNeeded, questions, passed) { }
 		
-		public Exam(int id, string name, List<Theory> theoryNeeded,  List<Question> questions)
+		public Exam(int id, string name, List<Theory> theoryNeeded,  List<Question> questions, List<User> passed)
 		{
 			this.id = id;
+			this.passed = passed;
 			this.name = name;
 			this.theoryNeeded = theoryNeeded;
 			this.questions = questions;
@@ -38,6 +41,12 @@ namespace Block.user.level
 		{
 			get {return questions;}
 			private set {questions = value;}
+		}
+		
+		public List<User> Passed
+		{
+			get {return passed;}
+			private set {passed = value;}
 		}
 		
 		public int GetId()

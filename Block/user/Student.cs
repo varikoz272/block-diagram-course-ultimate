@@ -4,10 +4,7 @@ namespace Block.user
 {
 	public class Student : User
 	{
-		public Student(string name, string password) : base(name, password)
-		{
-			
-		}
+		public Student(int id, string name, string password) : base(id, name, password) { }
 		
 		protected sealed override bool IsAvaibleToChat()
 		{

@@ -31,20 +31,22 @@ namespace Block.form
 		{
 			this.pageControl = new System.Windows.Forms.TabControl();
 			this.coursePage = new System.Windows.Forms.TabPage();
-			this.button1 = new System.Windows.Forms.Button();
 			this.trackBar = new System.Windows.Forms.TrackBar();
 			this.roundButton1 = new Block.form.RoundButton();
-			this.profilePage = new System.Windows.Forms.TabPage();
 			this.settingsPage = new System.Windows.Forms.TabPage();
+			this.darkRadioButton = new System.Windows.Forms.RadioButton();
+			this.lightRadioButton = new System.Windows.Forms.RadioButton();
+			this.colorsLabel = new System.Windows.Forms.Label();
+			this.joinRoundButton = new Block.form.RoundButton();
 			this.pageControl.SuspendLayout();
 			this.coursePage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
+			this.settingsPage.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pageControl
 			// 
 			this.pageControl.Controls.Add(this.coursePage);
-			this.pageControl.Controls.Add(this.profilePage);
 			this.pageControl.Controls.Add(this.settingsPage);
 			this.pageControl.Location = new System.Drawing.Point(0, 0);
 			this.pageControl.Name = "pageControl";
@@ -54,7 +56,7 @@ namespace Block.form
 			// 
 			// coursePage
 			// 
-			this.coursePage.Controls.Add(this.button1);
+			this.coursePage.Controls.Add(this.joinRoundButton);
 			this.coursePage.Controls.Add(this.trackBar);
 			this.coursePage.Controls.Add(this.roundButton1);
 			this.coursePage.Location = new System.Drawing.Point(4, 22);
@@ -64,16 +66,6 @@ namespace Block.form
 			this.coursePage.TabIndex = 1;
 			this.coursePage.Text = "Курс";
 			this.coursePage.UseVisualStyleBackColor = true;
-			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(48, 110);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(249, 225);
-			this.button1.TabIndex = 3;
-			this.button1.Text = "button1";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.Button1Click);
 			// 
 			// trackBar
 			// 
@@ -92,30 +84,62 @@ namespace Block.form
 			// 
 			this.roundButton1.Location = new System.Drawing.Point(8, 6);
 			this.roundButton1.Name = "roundButton1";
-			this.roundButton1.Size = new System.Drawing.Size(72, 58);
+			this.roundButton1.Size = new System.Drawing.Size(44, 41);
 			this.roundButton1.TabIndex = 0;
-			this.roundButton1.Text = "roundButton1";
+			this.roundButton1.Text = "->";
 			this.roundButton1.UseVisualStyleBackColor = true;
-			this.roundButton1.Click += new System.EventHandler(this.RoundButton1Click);
-			// 
-			// profilePage
-			// 
-			this.profilePage.Location = new System.Drawing.Point(4, 22);
-			this.profilePage.Name = "profilePage";
-			this.profilePage.Padding = new System.Windows.Forms.Padding(3);
-			this.profilePage.Size = new System.Drawing.Size(577, 535);
-			this.profilePage.TabIndex = 0;
-			this.profilePage.Text = "Профиль";
-			this.profilePage.UseVisualStyleBackColor = true;
+			this.roundButton1.Click += new System.EventHandler(this.SwitchCourseButtonClick);
 			// 
 			// settingsPage
 			// 
+			this.settingsPage.Controls.Add(this.darkRadioButton);
+			this.settingsPage.Controls.Add(this.lightRadioButton);
+			this.settingsPage.Controls.Add(this.colorsLabel);
 			this.settingsPage.Location = new System.Drawing.Point(4, 22);
 			this.settingsPage.Name = "settingsPage";
 			this.settingsPage.Size = new System.Drawing.Size(577, 535);
 			this.settingsPage.TabIndex = 2;
 			this.settingsPage.Text = "Настройки";
 			this.settingsPage.UseVisualStyleBackColor = true;
+			// 
+			// darkRadioButton
+			// 
+			this.darkRadioButton.Location = new System.Drawing.Point(9, 60);
+			this.darkRadioButton.Name = "darkRadioButton";
+			this.darkRadioButton.Size = new System.Drawing.Size(104, 24);
+			this.darkRadioButton.TabIndex = 2;
+			this.darkRadioButton.Text = "Тёмное";
+			this.darkRadioButton.UseVisualStyleBackColor = true;
+			// 
+			// lightRadioButton
+			// 
+			this.lightRadioButton.Checked = true;
+			this.lightRadioButton.Location = new System.Drawing.Point(9, 30);
+			this.lightRadioButton.Name = "lightRadioButton";
+			this.lightRadioButton.Size = new System.Drawing.Size(104, 24);
+			this.lightRadioButton.TabIndex = 1;
+			this.lightRadioButton.TabStop = true;
+			this.lightRadioButton.Text = "Светлое";
+			this.lightRadioButton.UseVisualStyleBackColor = true;
+			// 
+			// colorsLabel
+			// 
+			this.colorsLabel.Location = new System.Drawing.Point(9, 4);
+			this.colorsLabel.Name = "colorsLabel";
+			this.colorsLabel.Size = new System.Drawing.Size(100, 23);
+			this.colorsLabel.TabIndex = 0;
+			this.colorsLabel.Text = "Оформление";
+			this.colorsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// joinRoundButton
+			// 
+			this.joinRoundButton.Location = new System.Drawing.Point(58, 6);
+			this.joinRoundButton.Name = "joinRoundButton";
+			this.joinRoundButton.Size = new System.Drawing.Size(44, 41);
+			this.joinRoundButton.TabIndex = 3;
+			this.joinRoundButton.Text = "+";
+			this.joinRoundButton.UseVisualStyleBackColor = true;
+			this.joinRoundButton.Click += new System.EventHandler(this.JoinRoundButtonClick);
 			// 
 			// BlockForm
 			// 
@@ -131,15 +155,17 @@ namespace Block.form
 			this.coursePage.ResumeLayout(false);
 			this.coursePage.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
+			this.settingsPage.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
+		private Block.form.RoundButton joinRoundButton;
 		private Block.form.RoundButton roundButton1;
 		private System.Windows.Forms.TabPage settingsPage;
 		private System.Windows.Forms.TabPage coursePage;
-		private System.Windows.Forms.TabPage profilePage;
 		private System.Windows.Forms.TabControl pageControl;
 		private System.Windows.Forms.TrackBar trackBar;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.RadioButton darkRadioButton;
+		private System.Windows.Forms.RadioButton lightRadioButton;
+		private System.Windows.Forms.Label colorsLabel;
 	}
 }

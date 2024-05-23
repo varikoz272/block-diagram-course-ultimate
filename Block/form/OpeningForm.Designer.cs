@@ -37,6 +37,7 @@ namespace Block.form
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OpeningForm));
 			this.prepareTimer = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
@@ -49,12 +50,15 @@ namespace Block.form
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 261);
+			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.ClientSize = new System.Drawing.Size(400, 300);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "OpeningForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "OpeningForm";
 			this.ResumeLayout(false);
+
 		}
 		private System.Windows.Forms.Timer prepareTimer;
 	}

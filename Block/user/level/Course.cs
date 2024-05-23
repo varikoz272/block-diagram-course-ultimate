@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Block.Algorithm;
+using Block.manage;
 
 namespace Block.user.level
 {
@@ -19,6 +20,7 @@ namespace Block.user.level
 			this.name = name;
 			this.password = password;
 			this.exams = exams;
+			joinedUsers = new List<User>();
 		}
 		
 		public List<Exam> Exams
@@ -48,34 +50,6 @@ namespace Block.user.level
 		public int GetId()
 		{
 			return id;
-		}
-		
-		public static Course GetTestCourse()
-		{
-			List<Theory> theory = new List<Theory>();
-//			theory.Add(new Theory("урок первый", "чтобы открыть пеинт нажмине на пеинт"));
-//			theory.Add(new Theory("урок ворой", "чтобы закрыть закройте"));
-//			theory.Add(new Theory("финальный урок", "чконец"));
-			
-			List<Answer> answers = new List<Answer>();
-			answers.Add(new Answer("никак"));
-			answers.Add(new Answer("открыть"));
-			answers.Add(new Answer("закрыть"));
-			
-			List<Question> questions = new List<Question>();
-			questions.Add(new Question("как закрыть пеинт", answers, 2));
-			questions.Add(new Question("как закрыть пеинт", answers, 1));
-			
-			List<Exam> exams = new List<Exam>();
-			exams.Add(new Exam(theory, questions));
-			exams.Add(new Exam(theory, questions));
-			exams.Add(new Exam(theory, questions));
-			exams.Add(new Exam(theory, questions));
-			exams.Add(new Exam(theory, questions));
-			exams.Add(new Exam(theory, questions));
-			
-//			return new Course(exams);
-			return null;
 		}
 	}
 }

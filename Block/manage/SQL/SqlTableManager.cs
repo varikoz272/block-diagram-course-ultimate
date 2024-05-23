@@ -18,17 +18,18 @@ namespace Block.manage.SQL
 	{
 		private SqlConnection connection;
 		
-		private static readonly string USER_TABLE = "users";
-		private static readonly string USER_COURSES_TABLE = "user_courses";
-		private static readonly string COURSE_TABLE = "course";
-		private static readonly string COURSE_EXAMS_TABLE = "course_exams";
-		private static readonly string EXAM_TABLE = "exam";
-		private static readonly string NEEDED_THEORY_TABLE = "needed_theory";
-		private static readonly string THEORY_TABLE = "theory";
-		private static readonly string EXAM_QUESTIONS_TABLE = "exam_questions";
-		private static readonly string QUESTION_TABLE = "question";
-		private static readonly string QUESTION_ANSWERS_TABLE = "question_answers";
-		private static readonly string ANSWER_TABLE = "answer";
+		public static readonly string USER_TABLE = "users";
+		public static readonly string USER_COURSES_TABLE = "user_courses";
+		public static readonly string USER_PASSED_EXAMS = "passed_exams";
+		public static readonly string COURSE_TABLE = "course";
+		public static readonly string COURSE_EXAMS_TABLE = "course_exams";
+		public static readonly string EXAM_TABLE = "exam";
+		public static readonly string NEEDED_THEORY_TABLE = "needed_theory";
+		public static readonly string THEORY_TABLE = "theory";
+		public static readonly string EXAM_QUESTIONS_TABLE = "exam_questions";
+		public static readonly string QUESTION_TABLE = "question";
+		public static readonly string QUESTION_ANSWERS_TABLE = "question_answers";
+		public static readonly string ANSWER_TABLE = "answer";
 
 		public List<User> GetUsers()
 		{
@@ -45,15 +46,15 @@ namespace Block.manage.SQL
 		private User GetUser(DataRow row)
 		{
 			if (row["role_name"].Equals("Student"))
-				return new Student(row["name"].ToString(), row["password"].ToString());
+				return new Student((int) row["id"], row["name"].ToString(), row["password"].ToString());
 			if (row["role_name"].Equals("Tutor"))
-				return new Tutor(row["name"].ToString(), row["password"].ToString());
+				return new Tutor((int) row["id"], row["name"].ToString(), row["password"].ToString());
 			if (row["role_name"].Equals("Admin"))
-				return new Admin(row["name"].ToString(), row["password"].ToString());
+				return new Admin((int) row["id"], row["name"].ToString(), row["password"].ToString());
 			return null;
 		}
 		
-		public List<Course> GetCourses()
+		public List<Course> GetCourses(List<User> users)
 		{
 			DataTable courseTable = new DataTable();
 			new SqlDataAdapter("SELECT * FROM " + COURSE_TABLE, connection).Fill(courseTable);
@@ -73,12 +74,31 @@ namespace Block.manage.SQL
 			DataTable neededTheoryTable = new DataTable();
 			new SqlDataAdapter("SELECT * FROM " + NEEDED_THEORY_TABLE, connection).Fill(neededTheoryTable);
 			
+			DataTable questionTable = new DataTable();
+			new SqlDataAdapter("SELECT * FROM " + QUESTION_TABLE, connection).Fill(questionTable);
+			List<Question> questions = new List<Question>();
 			
-			foreach (DataRow curExam in examTable.Rows)
-				exams.Add(new Exam((int) curExam["id"], curExam["name"].ToString(), new List<Theory>(), new List<Question>()));
+			DataTable examQuestionsTable = new DataTable();
+			new SqlDataAdapter("SELECT * FROM " + EXAM_QUESTIONS_TABLE, connection).Fill(examQuestionsTable);
+			
+			DataTable answerTable = new DataTable();
+			new SqlDataAdapter("SELECT * FROM " + ANSWER_TABLE, connection).Fill(answerTable);
+			List<Answer> answers = new List<Answer>();
+			
+			DataTable questionAnswersTable = new DataTable();
+			new SqlDataAdapter("SELECT * FROM " + QUESTION_ANSWERS_TABLE, connection).Fill(questionAnswersTable);
+			
+			DataTable userCourses = new DataTable();
+			new SqlDataAdapter("SELECT * FROM " + USER_COURSES_TABLE, connection).Fill(userCourses);
+			
+			DataTable userPassedExams = new DataTable();
+			new SqlDataAdapter("SELECT * FROM " + USER_PASSED_EXAMS, connection).Fill(userPassedExams);
 			
 			foreach (DataRow curCourse in courseTable.Rows)
 				courses.Add(new Course((int) curCourse["id"], curCourse["name"].ToString(), curCourse["password"].ToString(), new List<Exam>()));
+			
+			foreach (DataRow curExam in examTable.Rows)
+				exams.Add(new Exam((int) curExam["id"], curExam["name"].ToString(), new List<Theory>(), new List<Question>(), new List<User>()));
 			
 			foreach (DataRow curConnect in courseExamsTable.Rows)
 			{
@@ -94,14 +114,62 @@ namespace Block.manage.SQL
 			{
 				Exam curExam = (Exam) GetObjectById((int) curConnect["exam_id"], exams);
 				Theory curTheory = (Theory) GetObjectById((int) curConnect["theory_id"], theory);
-				MessageBox.Show(curExam.Name + " " + curTheory.Name); //
 				curExam.TheoryNeeded.Add(curTheory);
 			}
+			
+			foreach (DataRow curQuestion in questionTable.Rows)
+				questions.Add(new Question((int) curQuestion["id"], curQuestion["text"].ToString(), new List<Answer>()));
+		
+			foreach (DataRow curConnect in examQuestionsTable.Rows)
+			{
+				Exam curExam = (Exam) GetObjectById((int) curConnect["exam_id"], exams);
+				Question curQuestion = (Question) GetObjectById((int) curConnect["question_id"], questions);
+				curExam.Questions.Add(curQuestion);
+			}
+			
+			foreach (DataRow curAnswer in answerTable.Rows)
+				answers.Add(new Answer((int) curAnswer["id"], curAnswer["text"].ToString()));
+			
+			foreach (DataRow curConnect in questionAnswersTable.Rows)
+			{
+				Question curQuestion = (Question) GetObjectById((int) curConnect["question_id"], questions);
+				Answer curAnswer =  (Answer) GetObjectById((int) curConnect["answer_id"], answers);
+				curQuestion.Answers.Add(curAnswer);
+			}
+			
+			foreach (DataRow curConnect in userCourses.Rows)
+			{
+				Course curCourse = (Course) GetObjectById((int) curConnect["course_id"], courses);
+				User curUser = (User) GetObjectById((int) curConnect["user_id"], users);
+				curCourse.JoinedUsers.Add(curUser);
+			}
+			
+			foreach (DataRow curConnect in userPassedExams.Rows)
+			{
+				User curUser = (User) GetObjectById((int) curConnect["user_id"], users);
+				Exam curExam = (Exam) GetObjectById((int) curConnect["exam_id"], exams);
+				curExam.Passed.Add(curUser);
+			}
+			
 			
 			return courses;
 		}
 		
 		private static object GetObjectById(int id, List<Course> list) // List<ISQLData>
+		{
+			foreach (var el in list)
+				if (el.GetId() == id) return el;
+			return null;
+		}
+		
+		private static object GetObjectById(int id, List<User> list) // List<ISQLData>
+		{
+			foreach (var el in list)
+				if (el.GetId() == id) return el;
+			return null;
+		}
+		
+		private static object GetObjectById(int id, List<Question> list)
 		{
 			foreach (var el in list)
 				if (el.GetId() == id) return el;
@@ -122,11 +190,17 @@ namespace Block.manage.SQL
 			return null;
 		}
 		
+		private static object GetObjectById(int id, List<Answer> list) // List<ISQLData>
+		{
+			foreach (var el in list)
+				if (el.GetId() == id) return el;
+			return null;
+		}
+		
 		public SqlTableManager(SqlConnection connection)
 		{
 			this.connection = connection;
 		}
-		
 		
 		public DataTable GetTable(string tableName)
 		{
@@ -138,7 +212,78 @@ namespace Block.manage.SQL
 			return table;
 		}
 		
+		private Course GetCourseByName(string name)
+		{
+			foreach (var curCourse in TopManager.instance.Courses)
+				if (curCourse.Name.Equals(name))
+					return curCourse;
+			
+			return null;
+		}
 		
+		public int GetFreeId(string tableName)
+		{
+			List<int> invalids = new List<int>();
+			foreach (DataRow curRow in GetTable(tableName).Rows)
+				invalids.Add((int) curRow["id"]);
+			
+			int lowest = 0;
+			while (invalids.Contains(lowest)) lowest++;
+			
+			return lowest;
+		}
+		
+		public void AddRow(string tableName, string[] columns, string[] values)
+		{
+			string query = "INSERT INTO " + tableName + " (";
+			for (int i = 0; i < columns.Length; i++)
+				query += columns[i] + ((i == columns.Length - 1) ? ") VALUES (" : ",");
+			
+
+			for (int i = 0; i < values.Length; i++)
+				query += "\'"+ values[i] + ((i == values.Length - 1) ? "\')" : "\',");
+			
+			ExecuteCommand(query);
+		}
+		
+		public void JoinCourse(User user, string courseName, string coursePassword)
+		{
+				DataTable courses = GetTable(SqlTableManager.COURSE_TABLE);
+				
+				foreach (DataRow curCourse in courses.Rows)
+					if (curCourse["name"].ToString().Equals(courseName) && curCourse["password"].ToString().Equals(coursePassword))
+						if (!GetCourseByName(curCourse["name"].ToString()).JoinedUsers.Contains(user))
+						{
+							AddRow(
+								SqlTableManager.USER_COURSES_TABLE,
+								new string[] { "user_id", "course_id" },
+								new string[] { user.GetId().ToString(), curCourse["id"].ToString() }
+							);
+							return;
+						} else throw new JoinException("Вы уже находитесь в группе");
+				
+				throw new JoinException("Неверное имя или пороль");
+		}
+		
+		public void LeaveCourse(User user, Course course)
+		{
+			if (!course.JoinedUsers.Contains(user)) throw new LeaveException("Пользователя нет на курсе");
+			
+			ExecuteCommand(
+				"DELETE FROM " +
+				USER_COURSES_TABLE + 
+				" WHERE " +
+				"user_id=" + user.GetId() + 
+				" AND " +
+				"course_id=" + course.GetId()
+			);
+		}
+		
+		private void ExecuteCommand(string query)
+		{
+			new SqlCommand(query, connection).ExecuteNonQuery();
+			TopManager.instance.Update();
+		}
 
 		public void CloseConnection()
 		{

@@ -1,0 +1,38 @@
+C:\Users\admin\Documents\SharpDevelop Projects\Block\Block\obj\Debug\Block.csprojResolveAssemblyReference.cache
+C:\Users\admin\Documents\SharpDevelop Projects\Block\Block\obj\Debug\Block.csproj.GenerateResource.Cache
+C:\Users\admin\Documents\SharpDevelop Projects\Block\Block\bin\Debug\Block.exe
+C:\Users\admin\Documents\SharpDevelop Projects\Block\Block\bin\Debug\Block.pdb
+C:\Users\admin\Documents\SharpDevelop Projects\Block\Block\obj\Debug\Block.exe
+C:\Users\admin\Documents\SharpDevelop Projects\Block\Block\obj\Debug\Block.pdb
+C:\Users\admin\Documents\SharpDevelop Projects\Block\Block\obj\Debug\Block.form.OpeningForm.resources
+C:\Users\admin\Documents\SharpDevelop Projects\Block\Block\obj\Debug\Block.form.LoginForm.resources
+C:\Users\admin\Documents\SharpDevelop Projects\Block\Block\obj\Debug\Block.form.BlockForm.resources
+K:\cs\Block\Block\bin\Debug\Block.exe
+K:\cs\Block\Block\bin\Debug\Block.pdb
+K:\cs\Block\Block\obj\Debug\Block.csprojResolveAssemblyReference.cache
+K:\cs\Block\Block\obj\Debug\Block.form.BlockForm.resources
+K:\cs\Block\Block\obj\Debug\Block.form.LoginForm.resources
+K:\cs\Block\Block\obj\Debug\Block.form.OpeningForm.resources
+K:\cs\Block\Block\obj\Debug\Block.csproj.GenerateResource.Cache
+K:\cs\Block\Block\obj\Debug\Block.exe
+K:\cs\Block\Block\obj\Debug\Block.pdb
+F:\cs\Block\Block\bin\Debug\Block.exe
+F:\cs\Block\Block\bin\Debug\Block.pdb
+F:\cs\Block\Block\obj\Debug\Block.csprojResolveAssemblyReference.cache
+F:\cs\Block\Block\obj\Debug\Block.form.BlockForm.resources
+F:\cs\Block\Block\obj\Debug\Block.form.LoginForm.resources
+F:\cs\Block\Block\obj\Debug\Block.form.OpeningForm.resources
+F:\cs\Block\Block\obj\Debug\Block.csproj.GenerateResource.Cache
+F:\cs\Block\Block\obj\Debug\Block.exe
+F:\cs\Block\Block\obj\Debug\Block.pdb
+H:\cs\Block\Block\obj\Debug\Block.csprojResolveAssemblyReference.cache
+H:\cs\Block\Block\obj\Debug\Block.form.BlockForm.resources
+H:\cs\Block\Block\obj\Debug\Block.form.LoginForm.resources
+H:\cs\Block\Block\obj\Debug\Block.form.OpeningForm.resources
+H:\cs\Block\Block\obj\Debug\Block.csproj.GenerateResource.Cache
+H:\cs\Block\Block\obj\Debug\Block.exe
+H:\cs\Block\Block\bin\Debug\Block.exe
+H:\cs\Block\Block\bin\Debug\Block.pdb
+H:\cs\Block\Block\obj\Debug\Block.pdb
+H:\cs\Block\Block\obj\Debug\Block.form.JoinForm.resources
+K:\cs\Block\Block\obj\Debug\Block.form.JoinForm.resources
